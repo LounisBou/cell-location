@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Lounisbou\CellLocation\CellData;
 use Lounisbou\CellLocation\CellLocator;
-use Lounisbou\CellLocation\RadioType;
+use Lounisbou\CellLocation\Enums\RadioType;
 use Lounisbou\CellLocation\Services\UnwiredLabsService;
 use Lounisbou\CellLocation\Services\OpenCellIDService;
 use Lounisbou\CellLocation\Services\GoogleGeolocationService;

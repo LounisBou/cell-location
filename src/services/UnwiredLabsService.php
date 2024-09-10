@@ -6,7 +6,6 @@ namespace Lounisbou\CellLocation\Services;
 
 use Lounisbou\CellLocation\CellData;
 use Lounisbou\CellLocation\Services\CellLocationServiceInterface;
-use Lounisbou\CellLocation\RadioType;
 
 use RuntimeException;
 
@@ -72,6 +71,8 @@ class UnwiredLabsService implements CellLocationServiceInterface
         return [
             'lat' => (float) $response['lat'],
             'lon' => (float) $response['lon'],
+            'accuracy' => (float) $response['accuracy'],
+            'address' => $response['address'],
         ];
     }
 

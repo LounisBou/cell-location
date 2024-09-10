@@ -6,7 +6,6 @@ namespace Lounisbou\CellLocation\Services;
 
 use Lounisbou\CellLocation\CellData;
 use Lounisbou\CellLocation\Services\CellLocationServiceInterface;
-use Lounisbou\CellLocation\RadioType;
 use RuntimeException;
 
 class GoogleGeolocationService implements CellLocationServiceInterface

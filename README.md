@@ -73,6 +73,7 @@ This project allows you to fetch the location from different services by simply 
 
 use Lounisbou\CellLocation\CellLocator;
 use Lounisbou\CellLocation\OpenCellIDService;
+use Lounisbou\CellLocation\Enums\RadioType;
 
 require_once __DIR__ . '/vendor/autoload.php';
 

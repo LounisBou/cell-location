@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lounisbou\CellLocation;
 
+use Lounisbou\CellLocation\Enums\RadioType;
+
 class CellData{
 
     /**
