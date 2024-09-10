@@ -13,6 +13,8 @@ declare(strict_types=1);
 use Lounisbou\CellLocation\CellLocator;
 use Lounisbou\CellLocation\RadioType;
 use Lounisbou\CellLocation\Services\UnwiredLabsService;
+use Lounisbou\CellLocation\Services\OpenCellIDService;
+use Lounisbou\CellLocation\Services\GoogleGeolocationService;
 use Symfony\Component\Dotenv\Dotenv;
 
 // Load the Composer autoloader
@@ -22,12 +24,13 @@ require_once __DIR__ . '/vendor/autoload.php';
 $dotenv = new Dotenv();
 $dotenv->loadEnv(__DIR__ . '/.env');
 
+
+/* UnwiredLabsService example */
+
 // Create an instance of the service
 $openCellIdService = new UnwiredLabsService($_ENV['UNWIREDLABS_API_KEY']);
-
 // Create an instance of the CellLocator
 $cellLocator = new CellLocator($openCellIdService);
-
 // Test the findLocation method with known cell location data
 try {
     $cellLocation = $cellLocator->getLocation(
@@ -40,5 +43,5 @@ try {
     // Print the cell location
     echo $cellLocation . PHP_EOL;
 } catch (Exception $e) {
-    echo 'Error: ' . $e->getMessage() . PHP_EOL;
+    echo $e->getMessage() . PHP_EOL;
 }

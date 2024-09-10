@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Lounisbou\CellLocation;
 
 class CellLocation {
-
-
-
+    
     public function __construct(private float $latitude, private float $longitude)
     {
     }

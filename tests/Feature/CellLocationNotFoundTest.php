@@ -1,9 +1,9 @@
 <?php
 
 use Lounisbou\CellLocation\CellLocator;
-use Lounisbou\CellLocation\OpenCellIDService;
-use Lounisbou\CellLocation\UnwiredLabsService;
-use Lounisbou\CellLocation\GoogleGeolocationService;
+use Lounisbou\CellLocation\Services\OpenCellIDService;
+use Lounisbou\CellLocation\Services\UnwiredLabsService;
+use Lounisbou\CellLocation\Services\GoogleGeolocationService;
 
 test('findLocation returns not found with OpenCellID service', function () {
     // Create an instance of the OpenCellID service
@@ -13,10 +13,7 @@ test('findLocation returns not found with OpenCellID service', function () {
     $cellLocator = new CellLocator($openCellIdService);
 
     // Expect the output to be 'Location not found.'
-    $this->expectOutputString('Location not found.');
-
-    // Expect cell location to be null
-    $this->assertNull($cellLocator->getLocation(0, 0, 0, 0));
+    $this->expectExceptionMessage("Geolocation service error: Code 1 - Cell not found.");
 
 });
 
