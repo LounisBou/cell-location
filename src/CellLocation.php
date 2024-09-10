@@ -11,7 +11,7 @@ class CellLocation {
      * 
      * @param float $latitude Latitude.
      * @param float $longitude Longitude.
-     * @param float $accuracy Accuracy.
+     * @param float $accuracy Accuracy (in meters).
      * @param string|null $address Address (optional).
      */
     public function __construct(
