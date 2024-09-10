@@ -6,7 +6,6 @@ namespace Lounisbou\CellLocation\Services;
 
 use Lounisbou\CellLocation\CellData;
 use Lounisbou\CellLocation\Services\CellLocationServiceInterface;
-use Lounisbou\CellLocation\RadioType;
 use RuntimeException;
 
 class OpenCellIDService implements CellLocationServiceInterface
@@ -76,11 +75,13 @@ class OpenCellIDService implements CellLocationServiceInterface
         // Extract the latitude and longitude
         $lat = (string)$xml->cell['lat'];
         $lon = (string)$xml->cell['lon'];
+        $accuracy = (string)$xml->cell['range'];
 
         // Return the location as float values
         return [
             'lat' => (float)$lat,
             'lon' => (float)$lon,
+            'accuracy' => (float)$accuracy,
         ];
     }
 }

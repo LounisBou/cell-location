@@ -21,7 +21,7 @@ class CellLocator
      * Get CellLocation based on MCC, MNC, LAC, and CellID.
      * 
      * @param CellData $cellData Cell data.
-     * @return CellLocation|null Location (latitude and longitude) or null if not found
+     * @return CellLocation|null Cell location or null if not found.
      * @throws RuntimeException on API error
      */
     public function getLocation(CellData $cellData): ?CellLocation
@@ -29,7 +29,12 @@ class CellLocator
         try {
             $response = $this->locationService->getLocation($cellData);
             if ($response) {
-                $location = new CellLocation($response['lat'], $response['lon'], $response['accuracy'] ?? null);
+                $location = new CellLocation(
+                    $response['lat'], 
+                    $response['lon'], 
+                    $response['accuracy'], 
+                    $response['address'] ?? null,
+                );
                 return $location;
             }
             return null;

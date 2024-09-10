@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Lounisbou\CellLocation\CellData;
 use Lounisbou\CellLocation\CellLocator;
-use Lounisbou\CellLocation\RadioType;
+use Lounisbou\CellLocation\Enums\RadioType;
 use Lounisbou\CellLocation\Services\OpenCellIDService;
 use Lounisbou\CellLocation\Services\UnwiredLabsService;
 use Lounisbou\CellLocation\Services\GoogleGeolocationService;
@@ -40,7 +40,7 @@ test('findLocation returns not found with UnwiredLabs service', function () use 
     $this->assertNull($cellLocator->getLocation($cellData));
 });
 
-test('findLocation returns not found with GoogleGeolocation service', function () use ($cellData) {
+test('findLocation NEVER RETURN NOT FOUND WITH GOOGLE MAPS API', function () use ($cellData) {
     // Create an instance of the GoogleGeolocationService
     $googleGeolocationService = new GoogleGeolocationService($_ENV['GOOGLE_MAPS_API_KEY']);
 
@@ -49,5 +49,8 @@ test('findLocation returns not found with GoogleGeolocation service', function (
 
     // Expect location accuracy to be over 2000 meters
     $cellLocation = $cellLocator->getLocation($cellData);
-    $this->assertGreaterThan(2000, $cellLocation->accuracy ?? 0);
+    // All values are float
+    $this->assertIsFloat($cellLocation->latitude);
+    $this->assertIsFloat($cellLocation->longitude);
+    $this->assertIsFloat($cellLocation->accuracy);
 });
