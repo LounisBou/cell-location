@@ -1,9 +1,9 @@
 <?php
 
-use CellLocation\CellLocator;
-use CellLocation\OpenCellIDService;
-use CellLocation\UnwiredLabsService;
-use CellLocation\GoogleGeolocationService;
+use Lounisbou\CellLocation\CellLocator;
+use Lounisbou\CellLocation\OpenCellIDService;
+use Lounisbou\CellLocation\UnwiredLabsService;
+use Lounisbou\CellLocation\GoogleGeolocationService;
 
 test('findLocation returns not found with OpenCellID service', function () {
     // Create an instance of the OpenCellID service

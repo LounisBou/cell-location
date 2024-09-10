@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CellLocation;
+namespace Lounisbou\CellLocation;
 
-use CellLocation\CellLocationServiceInterface;
+use Lounisbou\CellLocation\CellLocationServiceInterface;
 use RuntimeException;
 
 class CellLocator
