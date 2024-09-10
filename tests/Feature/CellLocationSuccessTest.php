@@ -26,7 +26,7 @@ test('findLocation works with OpenCellID service', function () use ($cellData) {
     $cellLocator = new CellLocator($openCellIdService);
 
     // Expect the output to match the known latitude and longitude
-    $this->expectOutputString('Latitude: 52.231644, Longitude: 21.011933');
+    $this->expectOutputString('Latitude: 52.231644, Longitude: 21.011933, Accuracy: 900');
     
     // Test the findLocation method with known cell location data
     $cellLocation = $cellLocator->getLocation($cellData);
@@ -43,7 +43,7 @@ test('findLocation works with UnwiredLabs service', function () use ($cellData) 
     $cellLocator = new CellLocator($unwiredLabsService);
 
     // Expect the output to match the known latitude and longitude
-    $this->expectOutputString('Latitude: 52.230743, Longitude: 21.009712');
+    $this->expectOutputString('Latitude: 52.230743, Longitude: 21.009712, Accuracy: 900');
     
     // Test the findLocation method with known cell location data
     $cellLocation = $cellLocator->getLocation($cellData);
@@ -60,7 +60,7 @@ test('findLocation works with Google Geolocation service', function () use ($cel
     $cellLocator = new CellLocator($googleMapsService);
 
     // Expect the output to match the known latitude and longitude
-    $this->expectOutputString('Latitude: 52.2314248, Longitude: 21.0105121');
+    $this->expectOutputString('Latitude: 52.2314248, Longitude: 21.0105121, Accuracy: 803');
     
     // Test the findLocation method with known cell location data
     $cellLocation = $cellLocator->getLocation($cellData);

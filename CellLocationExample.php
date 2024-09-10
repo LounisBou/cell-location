@@ -30,7 +30,7 @@ $cellData = new CellData(
     mcc: 260,
     mnc: 2,
     lac: 10250,
-    cellId: 2651,
+    cellId: 26511,
     radioType: RadioType::GSM
 );
 
@@ -44,9 +44,15 @@ $cellLocator = new CellLocator($openCellIdService);
 try {
     echo 'OpenCellIDService: ' . PHP_EOL;
     $cellLocation = $cellLocator->getLocation($cellData);
-    // Print the cell location
-    echo $cellLocation . PHP_EOL;
-    echo PHP_EOL;
+    // Check if the cell location is null
+    if ($cellLocation === null) {
+        echo "Cell location not found." . PHP_EOL;
+        echo PHP_EOL;
+    } else {
+        // Print the cell location
+        echo $cellLocation . PHP_EOL;
+        echo PHP_EOL;
+    }
 } catch (Exception $e) {
     echo $e->getMessage() . PHP_EOL;
 }
@@ -61,9 +67,15 @@ $cellLocator = new CellLocator($openCellIdService);
 try {
     echo "UnwiredLabsService:" . PHP_EOL;
     $cellLocation = $cellLocator->getLocation($cellData);
-    // Print the cell location
-    echo $cellLocation . PHP_EOL;
-    echo PHP_EOL;
+    // Check if the cell location is null
+    if ($cellLocation === null) {
+        echo "Cell location not found." . PHP_EOL;
+        echo PHP_EOL;
+    } else {
+        // Print the cell location
+        echo $cellLocation . PHP_EOL;
+        echo PHP_EOL;
+    }
 } catch (Exception $e) {
     echo $e->getMessage() . PHP_EOL;
 }
@@ -79,7 +91,7 @@ try {
     echo "GoogleGeolocationService:" . PHP_EOL;
     $cellLocation = $cellLocator->getLocation($cellData);
     // Print the cell location
-    echo $cellLocation . ", Accuracy: " . $cellLocation->accuracy . PHP_EOL;
+    echo $cellLocation . PHP_EOL;
     echo PHP_EOL;
 } catch (Exception $e) {
     echo $e->getMessage() . PHP_EOL;
