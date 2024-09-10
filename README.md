@@ -102,6 +102,9 @@ if ($location) {
 }
 ```
 
+![Render Location](assets/CellLocationExample.png)
+
+
 ### Services Supported
 
 - **OpenCellID**: Using the `OpenCellIDService`.
