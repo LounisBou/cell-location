@@ -68,6 +68,8 @@ This project allows you to fetch the location from different services by simply 
 
 ### Example Usage
 
+#### Get CellLocation from CellData
+
 ```php
 <?php
 
@@ -105,6 +107,57 @@ if ($location) {
 <p align="center">
   <img src="assets/CellLocationExample.png" alt="Render Location" />
 </p>
+
+#### Get triangulated CellLocation from multiple CellData
+
+```php
+<?php
+
+use Lounisbou\CellLocation\CellLocator;
+use Lounisbou\CellLocation\OpenCellIDService;
+use Lounisbou\CellLocation\Enums\RadioType;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+// Instantiate the service using OpenCellID
+$openCellIdService = new OpenCellIDService($_ENV['OPENCELLID_API_KEY']);
+
+// Create the locator
+$cellLocator = new CellLocator($openCellIdService);
+
+// Create CellData objects
+$cellData1 = new CellData(
+    mcc: 260,
+    mnc: 2,
+    lac: 10250,
+    cellId: 26511,
+    radioType: RadioType::GSM
+);
+$cellData2 = new CellData(
+    mcc: 260,
+    mnc: 2,
+    lac: 10250,
+    cellId: 26512,
+    radioType: RadioType::GSM
+);
+$cellData3 = new CellData(
+    mcc: 260,
+    mnc: 2,
+    lac: 10250,
+    cellId: 26513,
+    radioType: RadioType::GSM
+);
+
+// Find the location based on cell tower info
+$location = $cellLocator->findTriangulatedLocation([$cellData1, $cellData2, $cellData3]);
+
+if ($location) {
+    echo "Latitude: {$location['lat']}, Longitude: {$location['lng']}" . PHP_EOL;
+} else {
+    echo "Location not found." . PHP_EOL;
+}
+```
+
 
 ### Services Supported
 
