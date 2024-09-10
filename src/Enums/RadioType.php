@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lounisbou\CellLocation;
+namespace Lounisbou\CellLocation\Enums;
 
 enum RadioType: string
 {
