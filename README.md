@@ -102,8 +102,9 @@ if ($location) {
 }
 ```
 
-![Render Location](assets/CellLocationExample.png)
-
+<p align="center">
+  <img src="assets/CellLocationExample.png" alt="Render Location" />
+</p>
 
 ### Services Supported
 
