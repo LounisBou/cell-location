@@ -13,10 +13,11 @@ test('findLocation returns not found with OpenCellID service', function () {
     $cellLocator = new CellLocator($openCellIdService);
 
     // Expect the output to be 'Location not found.'
-    $this->expectOutputString('Location not found.' . PHP_EOL);
+    $this->expectOutputString('Location not found.');
 
-    // Test with unknown cell location data
-    $cellLocator->findLocation(0, 0, 0, 0);
+    // Expect cell location to be null
+    $this->assertNull($cellLocator->getLocation(0, 0, 0, 0));
+
 });
 
 test('findLocation returns not found with UnwiredLabs service', function () {
@@ -26,11 +27,8 @@ test('findLocation returns not found with UnwiredLabs service', function () {
     // Create an instance of the CellLocator
     $cellLocator = new CellLocator($unwiredLabsService);
 
-    // Expect the output to be 'Location not found.'
-    $this->expectOutputString('Location not found.' . PHP_EOL);
-
-    // Test with unknown cell location data
-    $cellLocator->findLocation(0, 0, 0, 0);
+    // Expect cell location to be null
+    $this->assertNull($cellLocator->getLocation(0, 0, 0, 0));
 });
 
 test('findLocation returns not found with GoogleGeolocation service', function () {
@@ -40,9 +38,6 @@ test('findLocation returns not found with GoogleGeolocation service', function (
     // Create an instance of the CellLocator
     $cellLocator = new CellLocator($googleGeolocationService);
 
-    // Expect the output to be 'Location not found.'
-    $this->expectOutputString('Location not found.' . PHP_EOL);
-
-    // Test with unknown cell location data
-    $cellLocator->findLocation(0, 0, 0, 0);
+    // Expect cell location to be null
+    $this->assertNull($cellLocator->getLocation(0, 0, 0, 0));
 });

@@ -12,11 +12,11 @@ test('findLocation returns error with invalid API key for OpenCellID service', f
     // Create an instance of the CellLocator
     $cellLocator = new CellLocator($openCellIdService);
 
-    // Expect the output to be an error message
-    $this->expectOutputString('Error: Failed to connect to the OpenCellID API.' . PHP_EOL);
+    // Expect getLocation to throw an exception
+    $this->expectExceptionMessage('Error: Failed to connect to the CellLocation API.');
 
     // Test with invalid API key
-    $cellLocator->findLocation(310, 410, 0, 0);
+    $cellLocator->getLocation(310, 410, 0, 0);
 });
 
 test('findLocation returns error with invalid API key for UnwiredLabs service', function () {
@@ -26,11 +26,11 @@ test('findLocation returns error with invalid API key for UnwiredLabs service', 
     // Create an instance of the CellLocator
     $cellLocator = new CellLocator($unwiredLabsService);
 
-    // Expect the output to be an error message
-    $this->expectOutputString('Error: Failed to connect to the UnwiredLabs API.' . PHP_EOL);
+    // Expect getLocation to throw an exception
+    $this->expectExceptionMessage('Error: Failed to connect to the CellLocation API.');
 
     // Test with invalid API key
-    $cellLocator->findLocation(310, 410, 0, 0);
+    $cellLocator->getLocation(310, 410, 0, 0);
 });
 
 test('findLocation returns error with invalid API key for GoogleGeolocation service', function () {
@@ -40,9 +40,9 @@ test('findLocation returns error with invalid API key for GoogleGeolocation serv
     // Create an instance of the CellLocator
     $cellLocator = new CellLocator($googleGeolocationService);
 
-    // Expect the output to be an error message
-    $this->expectOutputString('Error: Failed to connect to the Google Geolocation API.' . PHP_EOL);
+    // Expect getLocation to throw an exception
+    $this->expectExceptionMessage('Error: Failed to connect to the CellLocation API.');
 
     // Test with invalid API key
-    $cellLocator->findLocation(310, 410, 0, 0);
+    $cellLocator->getLocation(310, 410, 0, 0);
 });

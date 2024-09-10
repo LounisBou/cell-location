@@ -13,10 +13,13 @@ test('findLocation works with OpenCellID service', function () {
     $cellLocator = new CellLocator($openCellIdService);
 
     // Expect the output to match the known latitude and longitude
-    $this->expectOutputString('Latitude: 37.7749, Longitude: -122.4194' . PHP_EOL);
+    $this->expectOutputString('Latitude: 37.7749, Longitude: -122.4194');
     
     // Test the findLocation method with known cell location data
-    $cellLocator->findLocation(310, 410, 0, 0);
+    $cellLocation = $cellLocator->getLocation(310, 410, 0, 0);
+
+    // Print the cell location
+    echo $cellLocation;
 });
 
 test('findLocation works with UnwiredLabs service', function () {
@@ -30,7 +33,10 @@ test('findLocation works with UnwiredLabs service', function () {
     $this->expectOutputString('Latitude: 37.7749, Longitude: -122.4194' . PHP_EOL);
     
     // Test the findLocation method with known cell location data
-    $cellLocator->findLocation(310, 410, 0, 0);
+    $cellLocation = $cellLocator->getLocation(310, 410, 0, 0);
+
+    // Print the cell location
+    echo $cellLocation;
 });
 
 test('findLocation works with Google Geolocation service', function () {
@@ -44,5 +50,8 @@ test('findLocation works with Google Geolocation service', function () {
     $this->expectOutputString('Latitude: 37.7749, Longitude: -122.4194' . PHP_EOL);
     
     // Test the findLocation method with known cell location data
-    $cellLocator->findLocation(310, 410, 0, 0);
+    $cellLocation = $cellLocator->getLocation(310, 410, 0, 0);
+
+    // Print the cell location
+    echo $cellLocation;
 });

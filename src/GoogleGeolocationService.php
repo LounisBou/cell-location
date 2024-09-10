@@ -59,7 +59,7 @@ class GoogleGeolocationService implements CellLocationServiceInterface
         if (isset($response['location']['lat']) && isset($response['location']['lng'])) {
             return [
                 'lat' => (float) $response['location']['lat'],
-                'lng' => (float) $response['location']['lng'],
+                'lon' => (float) $response['location']['lng'],
             ];
         }
 

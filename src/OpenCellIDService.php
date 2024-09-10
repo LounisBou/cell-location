@@ -51,6 +51,8 @@ class OpenCellIDService implements CellLocationServiceInterface
             ],
         ];
 
+        var_dump($url, $contextOptions);
+
         // Create the context resource
         $context = stream_context_create($contextOptions);
 
