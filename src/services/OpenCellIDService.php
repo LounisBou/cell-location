@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lounisbou\CellLocation;
+namespace Lounisbou\CellLocation\Services;
 
-use Lounisbou\CellLocation\CellLocationServiceInterface;
+use Lounisbou\CellLocation\Services\CellLocationServiceInterface;
+use Lounisbou\CellLocation\RadioType;
 use RuntimeException;
 
 class OpenCellIDService implements CellLocationServiceInterface
@@ -51,8 +52,6 @@ class OpenCellIDService implements CellLocationServiceInterface
             ],
         ];
 
-        var_dump($url, $contextOptions);
-
         // Create the context resource
         $context = stream_context_create($contextOptions);
 
@@ -65,10 +64,29 @@ class OpenCellIDService implements CellLocationServiceInterface
 
         // Parse the XML response
         $xml = simplexml_load_string($response);
+        /*  Example of the XML response:
+            object(SimpleXMLElement)#8 (2) {
+                ["@attributes"]=>
+                array(1) {
+                    ["stat"]=>
+                    string(4) "fail"
+                }
+                ["err"]=>
+                object(SimpleXMLElement)#9 (1) {
+                    ["@attributes"]=>
+                    array(2) {
+                    ["info"]=>
+                    string(34) "No valid cell IDs or LACs provided"
+                    ["code"]=>
+                    string(1) "3"
+                    }
+                }
+            }
+        */
         if ($xml === false || (string)$xml['stat'] !== 'ok') {
-            throw new RuntimeException('Failed to retrieve valid response from OpenCellID.');
+            throw new RuntimeException('Code ' . (string)$xml->err['code'] . ' - ' . (string)$xml->err['info'] . '.');
         }
-
+        
         // Extract the latitude and longitude
         $lat = (string)$xml->cell['lat'];
         $lon = (string)$xml->cell['lon'];

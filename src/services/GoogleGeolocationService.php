@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Lounisbou\CellLocation;
+namespace Lounisbou\CellLocation\Services;
 
 use RuntimeException;
+use Lounisbou\CellLocation\Services\CellLocationServiceInterface;
+use Lounisbou\CellLocation\RadioType;
+
 
 class GoogleGeolocationService implements CellLocationServiceInterface
 {

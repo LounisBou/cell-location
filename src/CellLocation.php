@@ -6,12 +6,10 @@ namespace Lounisbou\CellLocation;
 
 class CellLocation {
 
-    public int $latitude;
-    public int $longitude;
 
-    public function __construct(int $latitude, int $longitude) {
-        $this->latitude = $latitude;
-        $this->longitude = $longitude;
+
+    public function __construct(private float $latitude, private float $longitude)
+    {
     }
 
     public function __toString() {

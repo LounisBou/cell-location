@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lounisbou\CellLocation;
+namespace Lounisbou\CellLocation\Services;
+
+use Lounisbou\CellLocation\Services\CellLocationServiceInterface;
+use Lounisbou\CellLocation\RadioType;
 
 use RuntimeException;
 
@@ -54,6 +57,11 @@ class UnwiredLabsService implements CellLocationServiceInterface
 
         // Execute the HTTP request and handle the response
         $response = $this->executeRequest(self::API_URL, $data);
+        
+        // Check if response status is OK
+        if (!isset($response['status']) || $response['status'] !== 'ok') {
+            throw new RuntimeException($response['message'] ?? 'Unknown error');
+        }
 
         // Validate and extract the location data from the response
         if (isset($response['lat']) && isset($response['lon'])) {

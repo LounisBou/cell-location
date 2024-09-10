@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lounisbou\CellLocation;
 
-use Lounisbou\CellLocation\CellLocationServiceInterface;
+use Lounisbou\CellLocation\Services\CellLocationServiceInterface;
 use Lounisbou\CellLocation\CellLocation;
 use Lounisbou\CellLocation\RadioType;
 use RuntimeException;
@@ -39,7 +39,7 @@ class CellLocator
             }
             return null;
         } catch (RuntimeException $e) {
-            throw new RuntimeException('Error: Failed to connect to the CellLocation API.');
+            throw new RuntimeException('Geolocation service error: ' . $e->getMessage());
         }
     }
 }
