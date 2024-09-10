@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Lounisbou\CellLocation\Services;
 
-use RuntimeException;
+use Lounisbou\CellLocation\CellData;
 use Lounisbou\CellLocation\Services\CellLocationServiceInterface;
 use Lounisbou\CellLocation\RadioType;
-
+use RuntimeException;
 
 class GoogleGeolocationService implements CellLocationServiceInterface
 {
@@ -30,27 +30,23 @@ class GoogleGeolocationService implements CellLocationServiceInterface
     /**
      * Get the location (latitude and longitude) based on MCC, MNC, LAC, and CellID.
      * 
-     * @param int $mcc Mobile Country Code
-     * @param int $mnc Mobile Network Code
-     * @param int $lac Location Area Code
-     * @param int $cellId Cell ID
-     * @param RadioType $radioType Radio type (GSM, CDMA, WCDMA, LTE)
+     * @param CellData $cellData Cell data.
      * @return array|null Location (latitude and longitude) or null if the location is not found
      * @throws RuntimeException on cURL or API error
      */
-    public function getLocation(int $mcc, int $mnc, int $lac, int $cellId, RadioType $radioType = RadioType::GSM): ?array
+    public function getLocation(CellData $cellData): ?array
     {
         // Prepare the request data to send to Google Geolocation API
         $data = [
-            'homeMobileCountryCode' => $mcc,
-            'homeMobileNetworkCode' => $mnc,
-            'radioType' => $radioType->value,
+            'homeMobileCountryCode' => $cellData->mcc,
+            'homeMobileNetworkCode' => $cellData->mnc,
+            'radioType' => $cellData->radioType->value,
             'cellTowers' => [
                 [
-                    'cellId' => $cellId,
-                    'locationAreaCode' => $lac,
-                    'mobileCountryCode' => $mcc,
-                    'mobileNetworkCode' => $mnc
+                    'cellId' => $cellData->cellId,
+                    'locationAreaCode' => $cellData->lac,
+                    'mobileCountryCode' => $cellData->mcc,
+                    'mobileNetworkCode' => $cellData->mnc
                 ]
             ]
         ];
@@ -61,8 +57,9 @@ class GoogleGeolocationService implements CellLocationServiceInterface
         // Validate and extract the location data from the response
         if (isset($response['location']['lat']) && isset($response['location']['lng'])) {
             return [
-                'lat' => (float) $response['location']['lat'],
-                'lon' => (float) $response['location']['lng'],
+                'lat' => (float)$response['location']['lat'],
+                'lon' => (float)$response['location']['lng'],
+                'accuracy' =>(float)$response['accuracy'] ?? null
             ];
         }
 
@@ -80,6 +77,7 @@ class GoogleGeolocationService implements CellLocationServiceInterface
      */
     private function executeRequest(string $url, array $data): array
     {
+        // Initialize cURL
         $curlHandle = curl_init($url);
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curlHandle, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
@@ -89,23 +87,31 @@ class GoogleGeolocationService implements CellLocationServiceInterface
         // Execute the request
         $response = curl_exec($curlHandle);
 
+        // Convert the response to an associative array
+        $response = json_decode($response, true);
+            
         // Handle any cURL errors
         if ($response === false || curl_errno($curlHandle)) {
             $error = curl_error($curlHandle);
             curl_close($curlHandle);
             throw new RuntimeException('cURL Error: ' . $error);
         }
-
         curl_close($curlHandle);
 
-        // Decode the JSON response
-        $decodedResponse = json_decode($response, true);
+        // Check API response for errors
+        if (isset($response['error'])) {
+            $error = $response['error'];
+            $message = $error['message'] ?? 'Unknown error';
+            $code = $error['code'] ?? 'Unknown code';
+            throw new RuntimeException('Code ' . $code . ' - ' . $message);
+        }
 
         // Handle JSON decoding errors
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new RuntimeException('Invalid JSON response from Google API: ' . json_last_error_msg());
         }
 
-        return $decodedResponse;
+        // Return the location as float values
+        return $response;
     }
 }

@@ -6,7 +6,6 @@ namespace Lounisbou\CellLocation;
 
 use Lounisbou\CellLocation\Services\CellLocationServiceInterface;
 use Lounisbou\CellLocation\CellLocation;
-use Lounisbou\CellLocation\RadioType;
 use RuntimeException;
 
 class CellLocator
@@ -21,20 +20,16 @@ class CellLocator
     /**
      * Get CellLocation based on MCC, MNC, LAC, and CellID.
      * 
-     * @param int $mcc Mobile Country Code
-     * @param int $mnc Mobile Network Code
-     * @param int $lac Location Area Code
-     * @param int $cellId Cell ID
-     * @param RadioType $radioType Radio type (GSM, CDMA, WCDMA, LTE)
+     * @param CellData $cellData Cell data.
      * @return CellLocation|null Location (latitude and longitude) or null if not found
      * @throws RuntimeException on API error
      */
-    public function getLocation(int $mcc, int $mnc, int $lac, int $cellId, RadioType $radioType = RadioType::GSM): ?CellLocation
+    public function getLocation(CellData $cellData): ?CellLocation
     {
         try {
-            $response = $this->locationService->getLocation($mcc, $mnc, $lac, $cellId);
+            $response = $this->locationService->getLocation($cellData);
             if ($response) {
-                $location = new CellLocation($response['lat'], $response['lon']);
+                $location = new CellLocation($response['lat'], $response['lon'], $response['accuracy'] ?? null);
                 return $location;
             }
             return null;

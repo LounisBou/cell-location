@@ -6,7 +6,7 @@ namespace Lounisbou\CellLocation;
 
 class CellLocation {
     
-    public function __construct(private float $latitude, private float $longitude)
+    public function __construct(public float $latitude, public float $longitude, public ?float $accuracy = null)
     {
     }
 

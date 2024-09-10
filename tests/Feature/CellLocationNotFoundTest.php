@@ -1,23 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
+use Lounisbou\CellLocation\CellData;
 use Lounisbou\CellLocation\CellLocator;
+use Lounisbou\CellLocation\RadioType;
 use Lounisbou\CellLocation\Services\OpenCellIDService;
 use Lounisbou\CellLocation\Services\UnwiredLabsService;
 use Lounisbou\CellLocation\Services\GoogleGeolocationService;
 
-test('findLocation returns not found with OpenCellID service', function () {
+// Create cell data with known location data
+$cellData = new CellData(
+    mcc: 260,
+    mnc: 2,
+    lac: 10250,
+    cellId: 2651, // Invalid cell ID (should be 26511)
+    radioType: RadioType::GSM
+);
+
+test('findLocation returns not found with OpenCellID service', function () use ($cellData) {
     // Create an instance of the OpenCellID service
     $openCellIdService = new OpenCellIDService($_ENV['OPENCELLID_API_KEY']);
 
     // Create an instance of the CellLocator
     $cellLocator = new CellLocator($openCellIdService);
 
-    // Expect the output to be 'Location not found.'
-    $this->expectExceptionMessage("Geolocation service error: Code 1 - Cell not found.");
-
+    // Expect cell location to be null
+    $this->assertNull($cellLocator->getLocation($cellData));
 });
 
-test('findLocation returns not found with UnwiredLabs service', function () {
+test('findLocation returns not found with UnwiredLabs service', function () use ($cellData) {
     // Create an instance of the UnwiredLabs service
     $unwiredLabsService = new UnwiredLabsService($_ENV['UNWIREDLABS_API_KEY']);
 
@@ -25,16 +37,17 @@ test('findLocation returns not found with UnwiredLabs service', function () {
     $cellLocator = new CellLocator($unwiredLabsService);
 
     // Expect cell location to be null
-    $this->assertNull($cellLocator->getLocation(0, 0, 0, 0));
+    $this->assertNull($cellLocator->getLocation($cellData));
 });
 
-test('findLocation returns not found with GoogleGeolocation service', function () {
+test('findLocation returns not found with GoogleGeolocation service', function () use ($cellData) {
     // Create an instance of the GoogleGeolocationService
-    $googleGeolocationService = new GoogleGeolocationService($_ENV['GOOGLE_API_KEY']);
+    $googleGeolocationService = new GoogleGeolocationService($_ENV['GOOGLE_MAPS_API_KEY']);
 
     // Create an instance of the CellLocator
     $cellLocator = new CellLocator($googleGeolocationService);
 
-    // Expect cell location to be null
-    $this->assertNull($cellLocator->getLocation(0, 0, 0, 0));
+    // Expect location accuracy to be over 2000 meters
+    $cellLocation = $cellLocator->getLocation($cellData);
+    $this->assertGreaterThan(2000, $cellLocation->accuracy ?? 0);
 });

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lounisbou\CellLocation\Services;
 
+use Lounisbou\CellLocation\CellData;
 use Lounisbou\CellLocation\Services\CellLocationServiceInterface;
 use Lounisbou\CellLocation\RadioType;
 
@@ -30,26 +31,22 @@ class UnwiredLabsService implements CellLocationServiceInterface
     /**
      * Get the location (latitude and longitude) based on MCC, MNC, LAC, and CellID.
      * 
-     * @param int $mcc Mobile Country Code
-     * @param int $mnc Mobile Network Code
-     * @param int $lac Location Area Code
-     * @param int $cellId Cell ID
-     * @param RadioType $radioType Radio type (GSM, CDMA, WCDMA, LTE)
+     * @param CellData $cellData Cell data.
      * @return array|null Location (latitude and longitude) or null if not found
      * @throws RuntimeException on cURL or API error
      */
-    public function getLocation(int $mcc, int $mnc, int $lac, int $cellId, RadioType $radioType = RadioType::GSM): ?array
+    public function getLocation(CellData $cellData): ?array
     {
         // Data payload to send to UnwiredLabs API
         $data = [
             'token' => $this->apiKey,
-            'radio' => $radioType->value, 
-            'mcc' => $mcc,
-            'mnc' => $mnc,
+            'radio' => $cellData->radioType->value, 
+            'mcc' => $cellData->mcc,
+            'mnc' => $cellData->mnc,
             'cells' => [
                 [
-                    'lac' => $lac,
-                    'cid' => $cellId,
+                    'lac' => $cellData->lac,
+                    'cid' => $cellData->cellId,
                 ],
             ],
             'address' => 1,
@@ -57,22 +54,25 @@ class UnwiredLabsService implements CellLocationServiceInterface
 
         // Execute the HTTP request and handle the response
         $response = $this->executeRequest(self::API_URL, $data);
-        
+
         // Check if response status is OK
         if (!isset($response['status']) || $response['status'] !== 'ok') {
+            // Check if error is "No matches found" 
+            if (isset($response['message']) && $response['message'] === 'No matches found') {
+                return null;
+            }
             throw new RuntimeException($response['message'] ?? 'Unknown error');
         }
 
-        // Validate and extract the location data from the response
-        if (isset($response['lat']) && isset($response['lon'])) {
-            return [
-                'lat' => (float) $response['lat'],
-                'lon' => (float) $response['lon'],
-            ];
+        // Check if response contains lat and lon
+        if (!isset($response['lat']) || !isset($response['lon'])) {
+            throw new RuntimeException('Invalid response from UnwiredLabs API: missing lat or lon');
         }
 
-        // Return null if no valid location data is found
-        return null;
+        return [
+            'lat' => (float) $response['lat'],
+            'lon' => (float) $response['lon'],
+        ];
     }
 
     /**
