@@ -101,6 +101,13 @@ if ($location) {
 }
 ```
 
+<<<<<<< Updated upstream
+=======
+<p align="center">
+  <img src="assets/CellLocationExample.png" alt="Render Location" />
+</p>
+
+>>>>>>> Stashed changes
 ### Services Supported
 
 - **OpenCellID**: Using the `OpenCellIDService`.
