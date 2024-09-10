@@ -1,5 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
+use Symfony\Component\Dotenv\Dotenv;
+
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader for
+| our application. We just need to utilize it! We'll require it into the
+| script here so that we do not have to worry about manual loading.
+|
+*/
+require_once __DIR__ . '/../vendor/autoload.php';
+
+/*
+|--------------------------------------------------------------------------
+| Load Environment Variables
+|--------------------------------------------------------------------------
+|
+| Load the environment variables from the .env file. You can pass the path to
+| the .env file as an argument to the "loadEnv" method. If no argument is
+| provided, it will try to load the .env file from the current directory.
+|
+*/
+
+// Load the .env file
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__ . '/../.env');
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
