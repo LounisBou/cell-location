@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Mobile Country Code
+ * @see https://en.wikipedia.org/wiki/Mobile_country_code
+ * @see https://www.mcc-mnc.com/
+ */
+
 declare(strict_types=1);
 
 namespace Lounisbou\CellLocation\Enums;
