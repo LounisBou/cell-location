@@ -1,6 +1,6 @@
 {
     "name": "lounisbou/cell-location",
-    "description": "CellLocation uses API to retrieve estimation of the position of a mobile within a cell's coverage area.",
+    "description": "CellLocation uses API to retrieve estimation of the position of a mobile within a cell's coverage area. It can uses triangulation and enclosing circle algorithms to estimate the possible position of a device based on data from multiple cell towers.",
     "type": "library",
     "require": {
         "php": "^8.1",
