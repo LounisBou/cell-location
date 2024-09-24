@@ -40,7 +40,7 @@ $cellData = new CellData(
 $openCellIdService = new OpenCellIDService($_ENV['OPENCELLID_API_KEY']);
 // Create an instance of the CellLocator
 $cellLocator = new CellLocator($openCellIdService);
-// Test the findLocation method with known cell location data
+// Test the getLocation method with known cell location data
 try {
     echo 'OpenCellIDService: ' . PHP_EOL;
     $cellLocation = $cellLocator->getLocation($cellData);
@@ -63,7 +63,7 @@ try {
 $openCellIdService = new UnwiredLabsService($_ENV['UNWIREDLABS_API_KEY']);
 // Create an instance of the CellLocator
 $cellLocator = new CellLocator($openCellIdService);
-// Test the findLocation method with known cell location data
+// Test the getLocation method with known cell location data
 try {
     echo "UnwiredLabsService:" . PHP_EOL;
     $cellLocation = $cellLocator->getLocation($cellData);
@@ -86,10 +86,51 @@ try {
 $openCellIdService = new GoogleGeolocationService($_ENV['GOOGLE_MAPS_API_KEY']);
 // Create an instance of the CellLocator
 $cellLocator = new CellLocator($openCellIdService);
-// Test the findLocation method with known cell location data
+// Test the getLocation method with known cell location data
 try {
     echo "GoogleGeolocationService:" . PHP_EOL;
     $cellLocation = $cellLocator->getLocation($cellData);
+    // Print the cell location
+    echo $cellLocation . PHP_EOL;
+    echo PHP_EOL;
+} catch (Exception $e) {
+    echo $e->getMessage() . PHP_EOL;
+}
+
+/* Triangulated location example */
+
+// Create an array of CellData objects
+
+$cellDataArray = [
+    new CellData(
+        mcc: 208,
+        mnc: 20,
+        lac: 475,
+        cellId: 315,
+        radioType: RadioType::LTE
+    ),
+    new CellData(
+        mcc: 208,
+        mnc: 1,
+        lac: 39010,
+        cellId: 21563909,
+        radioType: RadioType::LTE
+    ),
+    new CellData(
+        mcc: 208,
+        mnc: 10,
+        lac: 46603,
+        cellId: 142339,
+        radioType: RadioType::LTE
+    ),
+];
+
+// Create an instance of the CellLocator
+$cellLocator = new CellLocator($openCellIdService);
+// Test the getTriangulatedLocation method with the array of CellData objects
+try {
+    echo "Triangulated location:" . PHP_EOL;
+    $cellLocation = $cellLocator->getTriangulatedLocation($cellDataArray);
     // Print the cell location
     echo $cellLocation . PHP_EOL;
     echo PHP_EOL;

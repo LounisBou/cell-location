@@ -18,7 +18,7 @@ $cellData = new CellData(
     radioType: RadioType::GSM
 );
 
-test('findLocation works with OpenCellID service', function () use ($cellData) {
+test('getLocation works with OpenCellID service', function () use ($cellData) {
     // Create an instance of the OpenCellID service
     $openCellIdService = new OpenCellIDService($_ENV['OPENCELLID_API_KEY']);
 
@@ -35,7 +35,7 @@ test('findLocation works with OpenCellID service', function () use ($cellData) {
     echo $cellLocation;
 });
 
-test('findLocation works with UnwiredLabs service', function () use ($cellData) {
+test('getLocation works with UnwiredLabs service', function () use ($cellData) {
     // Create an instance of the UnwiredLabs service
     $unwiredLabsService = new UnwiredLabsService($_ENV['UNWIREDLABS_API_KEY']);
 
@@ -52,7 +52,7 @@ test('findLocation works with UnwiredLabs service', function () use ($cellData) 
     echo $cellLocation;
 });
 
-test('findLocation works with Google Geolocation service', function () use ($cellData) {
+test('getLocation works with Google Geolocation service', function () use ($cellData) {
     // Create an instance of the GoogleGeolocationService
     $googleMapsService = new GoogleGeolocationService($_ENV['GOOGLE_MAPS_API_KEY']);
 
@@ -68,3 +68,21 @@ test('findLocation works with Google Geolocation service', function () use ($cel
     // Print the cell location
     echo $cellLocation;
 });
+
+test('getTriangulatedLocation works with OpenCellID service', function ($cellIdService) use ($cellData) {
+    // Create an instance of the CellLocator
+    $cellLocator = new CellLocator($cellIdService);
+
+    // Expect the output to match the known latitude and longitude
+    $this->expectOutputString('Latitude: 52.231644, Longitude: 21.011933, Accuracy: 900');
+
+    // Test the findLocation method with known cell location data
+    $cellLocation = $cellLocator->getTriangulatedLocation([$cellData]);
+
+    // Print the cell location
+    echo $cellLocation;
+})->with([
+    'OpenCellID service' => [new OpenCellIDService($_ENV['OPENCELLID_API_KEY'])],
+    'UnwiredLabs service' => [new UnwiredLabsService($_ENV['UNWIREDLABS_API_KEY'])],
+    'Google Geolocation service' => [new GoogleGeolocationService($_ENV['GOOGLE_MAPS_API_KEY'])],
+]);

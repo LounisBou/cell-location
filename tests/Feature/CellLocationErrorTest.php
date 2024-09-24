@@ -18,7 +18,7 @@ $cellData = new CellData(
     radioType: RadioType::GSM
 );
 
-test('findLocation returns error with invalid API key for OpenCellID service', function () use ($cellData) {
+test('getLocation returns error with invalid API key for OpenCellID service', function () use ($cellData) {
     // Create an instance of the OpenCellID service with an invalid API key
     $openCellIdService = new OpenCellIDService('invalid-api-key');
 
@@ -32,7 +32,7 @@ test('findLocation returns error with invalid API key for OpenCellID service', f
     $cellLocator->getLocation($cellData);
 });
 
-test('findLocation returns error with invalid API key for UnwiredLabs service', function () use ($cellData) {
+test('getLocation returns error with invalid API key for UnwiredLabs service', function () use ($cellData) {
     // Create an instance of the UnwiredLabs service with an invalid API key
     $unwiredLabsService = new UnwiredLabsService('invalid-api-key');
 
@@ -46,7 +46,7 @@ test('findLocation returns error with invalid API key for UnwiredLabs service', 
     $cellLocator->getLocation($cellData);
 });
 
-test('findLocation returns error with invalid API key for GoogleGeolocation service', function () use ($cellData) {
+test('getLocation returns error with invalid API key for GoogleGeolocation service', function () use ($cellData) {
     // Create an instance of the GoogleGeolocationService with an invalid API key
     $googleGeolocationService = new GoogleGeolocationService('invalid-api-key');
 

@@ -108,7 +108,7 @@ class CellData{
         $this->mnc = $data['mnc'];
         $this->lac = $data['lac'];
         $this->cellId = $data['cellId'];
-        $this->radioType = new RadioType($data['radioType']);
+        $this->radioType = RadioType::fromValue($data['radioType']);
     }
 
     /**

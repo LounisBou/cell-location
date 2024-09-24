@@ -22,4 +22,16 @@ enum RadioType: string
     {
         return in_array($radioType, self::cases(), true);
     }
+
+    public static function fromValue(string $value): static
+    {
+        return match ($value) {
+            'gsm' => self::GSM,
+            'cdma' => self::CDMA,
+            'wcdma' => self::WCDMA,
+            'lte' => self::LTE,
+            'nr' => self::NR,
+            default => throw new \UnexpectedValueException("Invalid radio type: $value"),
+        };
+    }
 }
