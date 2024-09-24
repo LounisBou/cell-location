@@ -188,7 +188,7 @@ class CellLocator
         }
 
         $estimatedAccuracy = $maxResidual;
-        
+
         // Return the estimated location
         return new CellLocation(
             // Round to 7 decimal places for consistency
