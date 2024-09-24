@@ -7,12 +7,15 @@ This project provides a service to determine the location (latitude and longitud
 - [UnwiredLabs](https://unwiredlabs.com)
 - [Google Maps Geolocation API](https://developers.google.com/maps/documentation/geolocation/overview)
 
+It can uses **triangulation** and **enclosing circle algorithms** to estimate the possible position of a device based on data from multiple cell towers.
+
 ## Table of Contents
 
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
 - [Running Tests](#running-tests)
+- [Future Improvements](#future-improvements)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -68,6 +71,30 @@ This project allows you to fetch the location from different services by simply 
 
 ### Example Usage
 
+#### Key Concepts
+
+- **Cell Data**:
+    - `CellData` stores the information of the device's interaction with the cell towers such as **MNC**, **MCC**, **LAC**, and **CellID**.
+
+- **Cell Location**:
+    - `CellLocation` objects store the physical location of the **cell antenna**, defined by **latitude**, **longitude**, and **accuracy** (distance range where the device might be relative to the tower).
+
+- **Triangulation**:
+    - Using data from multiple towers, the program estimates a device's position by calculating the intersection of circles defined by the cell tower locations and accuracy.
+    - **Each circle** is centered at a **CellLocation**'s latitude and longitude, with a radius equal to the accuracy (distance to the device).
+
+- **Intersection of Circles**:
+    - The algorithm finds the intersection zone of the circles, calculates the **centroid** of the intersection, and uses the maximum distance between the centroid and the edges of the intersection zone to define the result possible position as a circle.
+
+- **Smallest Enclosing Circle**:
+    - The algorithm determines the smallest enclosing circle that intersects parts of all input circles. This circle's **center** represents the estimated device location, and the **radius** defines the zone of possible locations.
+
+- **Enclosing Circle Algorithm**:
+    - This algorithm calculates the smallest circle that encloses the intersection zone of all cell coverage areas.
+    - `Center` geometric center of the intersection zone. 
+    - `Radius` distance from the center to the farthest point within the intersection zone.
+
+
 #### Get CellLocation from CellData
 
 ```php
@@ -95,10 +122,10 @@ $cellData = new CellData(
 );
 
 // Find the location based on cell tower info
-$location = $cellLocator->findLocation($cellData);
+$location = $cellLocator->getLocation($cellData);
 
 if ($location) {
-    echo "Latitude: {$location['lat']}, Longitude: {$location['lng']}" . PHP_EOL;
+    echo "Latitude: {$location->latitude}, Longitude: {$location->longitude}, Accuracy: {$location->accuracy}" . PHP_EOL;
 } else {
     echo "Location not found." . PHP_EOL;
 }
@@ -126,38 +153,51 @@ $openCellIdService = new OpenCellIDService($_ENV['OPENCELLID_API_KEY']);
 $cellLocator = new CellLocator($openCellIdService);
 
 // Create CellData objects
-$cellData1 = new CellData(
+$cellData = new CellData(
     mcc: 260,
     mnc: 2,
     lac: 10250,
     cellId: 26511,
     radioType: RadioType::GSM
 );
+
 $cellData2 = new CellData(
     mcc: 260,
     mnc: 2,
     lac: 10250,
-    cellId: 26512,
+    cellId: 21771,
     radioType: RadioType::GSM
 );
+
 $cellData3 = new CellData(
     mcc: 260,
     mnc: 2,
-    lac: 10250,
-    cellId: 26513,
+    lac: 58120,
+    cellId: 41964,
     radioType: RadioType::GSM
 );
 
 // Find the location based on cell tower info
-$location = $cellLocator->findTriangulatedLocation([$cellData1, $cellData2, $cellData3]);
+$location = $cellLocator->getTriangulatedLocation([$cellData1, $cellData2, $cellData3]);
 
 if ($location) {
-    echo "Latitude: {$location['lat']}, Longitude: {$location['lng']}" . PHP_EOL;
+    echo "Latitude: {$location->latitude}, Longitude: {$location->longitude}, Accuracy: {$location->accuracy}" . PHP_EOL;
 } else {
     echo "Location not found." . PHP_EOL;
 }
 ```
 
+<p align="center">
+  <img src="assets/TriangulationExampleResult.png" alt="Render Location" />
+</p>
+
+### Advanced Features
+Haversine Distance Calculation: Uses the Haversine formula to calculate distances between latitude and longitude points on Earth, which accounts for the Earth's curvature.
+Error Handling: Proper handling of cases where circles do not intersect or input data is insufficient.
+
+### Limitations
+This version uses an approximate method for finding the intersection of circles. For higher precision, computational geometry algorithms can be implemented, though they may require more complex libraries.
+The algorithm assumes that all circles must intersect. If they don't, the program throws an error.
 
 ### Services Supported
 
@@ -174,6 +214,12 @@ To run the tests, including those for error handling and success responses, use 
 ```bash
 ./vendor/bin/pest
 ```
+
+## Future Improvements
+
+- Exact Circle Intersection: Implementing a more precise geometric intersection algorithm could improve the accuracy.
+- RSSI Integration: While this implementation doesn't use RSSI, future improvements could involve integrating signal strength to improve location estimation.
+- Kalman Filters: For real-time tracking, Kalman filters or other smoothing algorithms could be implemented to refine the estimated location based on multiple readings over time.
 
 ## Contributing
 

@@ -18,7 +18,7 @@ $cellData = new CellData(
     radioType: RadioType::GSM
 );
 
-test('findLocation returns not found with OpenCellID service', function () use ($cellData) {
+test('getLocation returns not found with OpenCellID service', function () use ($cellData) {
     // Create an instance of the OpenCellID service
     $openCellIdService = new OpenCellIDService($_ENV['OPENCELLID_API_KEY']);
 
@@ -29,7 +29,7 @@ test('findLocation returns not found with OpenCellID service', function () use (
     $this->assertNull($cellLocator->getLocation($cellData));
 });
 
-test('findLocation returns not found with UnwiredLabs service', function () use ($cellData) {
+test('getLocation returns not found with UnwiredLabs service', function () use ($cellData) {
     // Create an instance of the UnwiredLabs service
     $unwiredLabsService = new UnwiredLabsService($_ENV['UNWIREDLABS_API_KEY']);
 
@@ -40,7 +40,7 @@ test('findLocation returns not found with UnwiredLabs service', function () use 
     $this->assertNull($cellLocator->getLocation($cellData));
 });
 
-test('findLocation NEVER RETURN NOT FOUND WITH GOOGLE MAPS API', function () use ($cellData) {
+test('getLocation NEVER RETURN NOT FOUND WITH GOOGLE MAPS API', function () use ($cellData) {
     // Create an instance of the GoogleGeolocationService
     $googleGeolocationService = new GoogleGeolocationService($_ENV['GOOGLE_MAPS_API_KEY']);
 
